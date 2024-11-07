@@ -1,0 +1,21 @@
+POST http://localhost:3333/pdf/estimate
+content-type: application/json
+{
+   "number":1,
+   "date":"19 de Julho de 2024",
+   "from":{
+      "businessName":"Acme Inc.",
+      "contactName":"John Doe",
+      "address":"1234 Main St, Springfield, IL",
+      "email":"mail@acme.inc",
+      "phone":"(555) 555-5555",
+      "website":"acme.com"
+   },
+   "to":{
+      "contactName":"Jane Doe",
+      "address":"1234 Elm St, Springfield, IL",
+      "email":"jane.doe@gmail.com",
+      "phone":"(111) 222-3333"
+   },
+   "companyImg":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Samsung_Logo.svg/2560px-Samsung_Logo.svg.png"
+}

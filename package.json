@@ -1,0 +1,34 @@
+{
+    "name": "orcamento",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "tsx src/server.ts",
+        "start:dev": "tsx watch src/server.ts",
+        "build": "tsup src",
+        "test": "vitest"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/node": "^22.4.0",
+        "@types/react": "^18.3.11",
+        "@types/react-dom": "^18.3.1",
+        "react": "^18.3.1",
+        "tsup": "^8.2.4",
+        "tsx": "^4.17.0",
+        "typescript": "^5.5.4",
+        "vitest": "^2.0.5"
+    },
+    "dependencies": {
+        "@fastify/cors": "^8.0.1",
+        "dotenv": "^16.4.5",
+        "fastify": "^4.28.1",
+        "puppeteer": "^23.6.0",
+        "puppeteer-core": "^23.6.0",
+        "react-dom": "^18.3.1",
+        "zod": "^3.23.8"
+    }
+}
