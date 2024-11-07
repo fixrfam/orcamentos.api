@@ -3,7 +3,7 @@ import { ZodError } from "zod";
 import { pdfRoutes } from "./routes/pdf";
 import cors from "@fastify/cors";
 
-export const server = fastify({ logger: true });
+export const server = fastify();
 
 server.register(cors, {
     origin: [
@@ -38,7 +38,8 @@ server.get("/health", (request, reply) => {
 });
 
 server.listen({
-    port: 3333,
+    host: "0.0.0.0",
+    port: process.env.PORT ? Number(process.env.PORT) : 3333,
 });
 
 console.log("Server listening at localhost:3333");
