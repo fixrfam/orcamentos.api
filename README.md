@@ -121,4 +121,4 @@ POST /pdf/estimate
 
 ## Observação
 
-Esta API foi projetada para fins de demonstração e não reflete a lógica completa de geração de orçamentos usada em produção no sistema Fixr.
+Esta API foi projetada para fins de demonstração e não reflete a lógica completa de geração de orçamentos usada em produção no sistema.

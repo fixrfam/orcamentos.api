@@ -1,4 +1,5 @@
 import React, { CSSProperties } from "react";
+import { View, Text, Document, Page, Font, Image } from "@react-pdf/renderer";
 import FixrLogo from "./FixrLogo";
 
 interface Entity {
@@ -33,34 +34,19 @@ interface EstimateProps {
     discountPercentage?: number;
 }
 
-export const EstimateFooter = ({ businessName, cnpj }: { businessName: string; cnpj: string }) => {
-    const styles: { [key: string]: CSSProperties } = {
-        footer: {
-            display: "flex",
-            justifyContent: "space-between",
-            width: "100%",
-            padding: "0 76px",
+Font.register({
+    family: "Inter",
+    fonts: [
+        {
+            src: "./src/components/fonts/Inter-Regular.ttf",
+            fontWeight: 400,
         },
-        left: {
-            display: "flex",
-            alignItems: "center",
-            fontSize: "12px",
-            color: "#d4d4d4",
+        {
+            src: "./src/components/fonts/Inter-SemiBold.ttf",
+            fontWeight: 600,
         },
-        icon: { display: "inline-block", width: "64px" },
-    };
-
-    return (
-        <>
-            <footer style={styles.footer}>
-                <div style={styles.left}>
-                    {businessName} - CNPJ: {cnpj}
-                </div>
-                <FixrLogo fill='#d4d4d4' style={styles.icon} />
-            </footer>
-        </>
-    );
-};
+    ],
+});
 
 export const EstimatePdf = ({ estimateProps }: { estimateProps: EstimateProps }) => {
     const formatBRL = (value: number) => {
@@ -79,121 +65,308 @@ export const EstimatePdf = ({ estimateProps }: { estimateProps: EstimateProps })
     const finalValue = estimateTotal - discount;
 
     return (
-        <>
-            <script src='https://cdn.tailwindcss.com'></script>
-            <div className='w-[210mm] h-[297mm] text-neutral-950'>
-                <header className='w-full flex justify-between px-3'>
-                    <div className='space-y-6'>
-                        <h1 className='text-4xl font-semibold tracking-tight'>Orçamento</h1>
-                        <table className='text-sm'>
-                            <tr>
-                                <td className='text-neutral-500 min-w-48'>Número do orçamento</td>
-                                <td className='text-right'>
+        <Document>
+            <Page
+                size={"A4"}
+                style={{
+                    padding: "54px",
+                    color: "#111827",
+                    fontFamily: "Inter",
+                }}
+            >
+                <View style={{ flexDirection: "row", paddingHorizontal: "10px" }} fixed>
+                    <View style={{ flex: 1 }}>
+                        <Text
+                            style={{
+                                fontSize: "21px",
+                                fontWeight: "semibold",
+                                letterSpacing: "-0.75px",
+                            }}
+                        >
+                            Orçamento
+                        </Text>
+                        <View
+                            style={{
+                                marginTop: "16px",
+                                fontSize: "8.5px",
+                                color: "#6B7280",
+                                gap: "2px",
+                            }}
+                        >
+                            <View style={{ flexDirection: "row" }}>
+                                <Text style={{ flex: 1 }}>Número do orçamento</Text>
+                                <Text style={{ color: "#000", flex: 2 }}>
                                     {String(estimateProps.number).padStart(4, "0")}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className='text-neutral-500'>Data do orçamento</td>
-                                <td className='text-right font-semibold'>{estimateProps.date}</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div className='max-w-44 max-h-28 flex justify-end'>
-                        {estimateProps.company.img ? (
-                            <img
-                                src={estimateProps.company.img}
-                                className='h-full object-contain'
-                            ></img>
-                        ) : (
-                            <FixrLogo fill='#dedede' className='w-48' />
-                        )}
-                    </div>
-                </header>
-                <div className='w-full flex justify-between mt-8 px-3'>
-                    <div>
-                        <h2 className='text-base font-semibold tracking-tight'>Emissor</h2>
-                        <h3 className='font-semibold text-xl tracking-tight'>
-                            {estimateProps.company.businessName}
-                        </h3>
-                        <div className='mt-2'>
+                                </Text>
+                            </View>
+                            <View style={{ flexDirection: "row" }}>
+                                <Text style={{ flex: 1 }}>Data do orçamento</Text>
+                                <Text style={{ fontWeight: "semibold", color: "#000", flex: 2 }}>
+                                    {estimateProps.date}
+                                </Text>
+                            </View>
+                        </View>
+                    </View>
+                    {estimateProps.company.img ? (
+                        <Image
+                            src={estimateProps.company.img}
+                            style={{ maxWidth: "128px", maxHeight: "68px", objectFit: "contain" }}
+                        />
+                    ) : (
+                        <FixrLogo style={{ width: "128px" }} />
+                    )}
+                </View>
+
+                <View
+                    style={{ flexDirection: "row", marginTop: "20px", paddingHorizontal: "10px" }}
+                >
+                    <View style={{ flex: 1, gap: "6px" }}>
+                        <View style={{ gap: "2px" }}>
+                            <Text
+                                style={{
+                                    fontSize: "10px",
+                                    fontWeight: "semibold",
+                                    letterSpacing: "-0.25px",
+                                }}
+                            >
+                                Emissor
+                            </Text>
+                            <Text
+                                style={{
+                                    fontSize: "14px",
+                                    fontWeight: "semibold",
+                                    letterSpacing: "-0.5px",
+                                }}
+                            >
+                                {estimateProps.company.businessName}
+                            </Text>
+                        </View>
+                        <View style={{ gap: "1px" }}>
                             {Object.entries(estimateProps.company).map(([key, value]) => {
                                 if (["img", "businessName"].includes(key)) return null;
-                                return <p className='text-sm'>{value}</p>;
+                                return (
+                                    <Text style={{ fontSize: "8.5px" }} key={key}>
+                                        {value}
+                                    </Text>
+                                );
                             })}
-                        </div>
-                    </div>
-                    <div className='text-right'>
-                        <h2 className='text-base font-semibold tracking-tight'>Cliente</h2>
-                        <h3 className='font-semibold text-xl tracking-tight'>
+                        </View>
+                    </View>
+
+                    <View style={{ textAlign: "right", flex: 1, gap: "6px" }}>
+                        <Text
+                            style={{
+                                fontSize: "10px",
+                                fontWeight: "semibold",
+                                letterSpacing: "-0.25px",
+                            }}
+                        >
+                            Cliente
+                        </Text>
+                        <Text
+                            style={{
+                                fontSize: "14px",
+                                fontWeight: "semibold",
+                                letterSpacing: "-0.5px",
+                            }}
+                        >
                             {estimateProps.client.contactName}
-                        </h3>
-                        <div className='mt-2'>
-                            {Object.entries(estimateProps.client).map(([key, value]) => {
-                                return <p className='text-sm'>{value}</p>;
-                            })}
-                        </div>
-                    </div>
-                </div>
-                <main className='w-full mt-8'>
-                    <table className='w-full'>
-                        <thead>
-                            <tr className='text-sm font-semibold tracking-tight uppercase text-neutral-500 border-b-[1px] border-neutral-200'>
-                                <td className='py-4 px-3'>Item</td>
-                                <td className='py-4 px-3'>Tipo</td>
-                                <td className='py-4 px-3 text-right'>Valor</td>
-                                <td className='py-4 px-3'>Quantidade</td>
-                                <td className='py-4 px-3 text-right'>Total</td>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {estimateProps.items.map((item, index) => (
-                                <tr key={index} className='odd:bg-none even:bg-neutral-50 text-sm'>
-                                    <td className='py-3 px-3'>{item.name}</td>
-                                    <td className='py-3 px-3'>{item.type}</td>
-                                    <td className='py-3 px-3 text-right'>
-                                        {formatBRL(item.value)}
-                                    </td>
-                                    <td className='py-3 px-3'>{item.quantity}</td>
-                                    <td className='py-3 px-3 font-semibold text-right'>
-                                        {formatBRL(item.value * item.quantity)}
-                                    </td>
-                                </tr>
+                        </Text>
+                        <View style={{ gap: "1px" }}>
+                            {Object.entries(estimateProps.client).map(([key, value]) => (
+                                <Text style={{ fontSize: "8.5px" }} key={key}>
+                                    {value}
+                                </Text>
                             ))}
-                        </tbody>
-                    </table>
-                    <div className='w-full flex justify-between mt-10 gap-8 break-inside-avoid'>
-                        <div className='text-base break-inside-avoid pl-3'>
-                            <h4 className='font-semibold'>Notas</h4>
-                            <p className='mt-2 tracking-tight text-sm text-neutral-500 text-justify max-w-[300px]'>
-                                Este orçamento é válido por 30 dias a partir da data de emissão e
-                                deve ser aceito formalmente para que os serviços possam ser
-                                realizados. Quaisquer alterações solicitadas podem impactar os
-                                valores apresentados.
-                            </p>
-                        </div>
+                        </View>
+                    </View>
+                </View>
 
-                        <table className='text-base min-w-80 break-inside-avoid'>
-                            <tr className='font-semibold'>
-                                <td className='px-3'>Subtotal</td>
-                                <td className='px-3 text-right'>{formatBRL(estimateTotal)}</td>
-                            </tr>
-                            <tr className='border-b-[1px] border-neutral-200'>
-                                <td className='px-3 pb-4'>
-                                    Desconto ({estimateProps.discountPercentage ?? 0}%)
-                                </td>
-                                <td className='px-3 text-right pb-4'>{formatBRL(discount)}</td>
-                            </tr>
-                            <tr className='font-semibold text-xl'>
-                                <td className='px-3 py-3'>Valor à pagar</td>
-                                <td className='px-3 py-3 text-right text-2xl'>
-                                    {formatBRL(finalValue)}
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </main>
-            </div>
-        </>
+                <View style={{ marginVertical: "20px" }}>
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            borderBottom: "1px solid #e0e0e0",
+                            padding: "10px",
+                            gap: "17.5px",
+                            fontSize: "7.5px",
+                        }}
+                    >
+                        <Text
+                            style={{
+                                fontWeight: "semibold",
+                                color: "#6B7280",
+                                textTransform: "uppercase",
+                                flex: 3,
+                            }}
+                        >
+                            Item
+                        </Text>
+                        <Text
+                            style={{
+                                fontWeight: "semibold",
+                                color: "#6B7280",
+                                textTransform: "uppercase",
+                                flex: 0.75,
+                            }}
+                        >
+                            Tipo
+                        </Text>
+                        <Text
+                            style={{
+                                fontWeight: "semibold",
+                                color: "#6B7280",
+                                textTransform: "uppercase",
+                                textAlign: "right",
+                                flex: 1,
+                            }}
+                        >
+                            Valor
+                        </Text>
+                        <Text
+                            style={{
+                                fontWeight: "semibold",
+                                color: "#6B7280",
+                                textTransform: "uppercase",
+                                flex: 0.5,
+                            }}
+                        >
+                            Qtd
+                        </Text>
+                        <Text
+                            style={{
+                                fontSize: "7.5px",
+                                fontWeight: "semibold",
+                                color: "#6B7280",
+                                textTransform: "uppercase",
+                                textAlign: "right",
+                                flex: 1,
+                            }}
+                        >
+                            Total
+                        </Text>
+                    </View>
+                    {estimateProps.items.map((item, index) => (
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                backgroundColor: index % 2 === 0 ? "transparent" : "#f9fafb",
+                                padding: "10px",
+                                gap: "17.5px",
+                                fontSize: "8.5px",
+                                alignItems: "center",
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    flex: 3,
+                                }}
+                            >
+                                {item.name}
+                            </Text>
+                            <Text
+                                style={{
+                                    flex: 0.75,
+                                }}
+                            >
+                                {item.type}
+                            </Text>
+                            <Text
+                                style={{
+                                    textAlign: "right",
+                                    flex: 1,
+                                }}
+                            >
+                                {formatBRL(item.value)}
+                            </Text>
+                            <Text
+                                style={{
+                                    flex: 0.5,
+                                }}
+                            >
+                                {item.quantity}
+                            </Text>
+                            <Text
+                                style={{
+                                    textAlign: "right",
+                                    flex: 1,
+                                    fontWeight: "semibold",
+                                }}
+                            >
+                                {formatBRL(item.value * item.quantity)}
+                            </Text>
+                        </View>
+                    ))}
+                </View>
+
+                <View style={{ flexDirection: "row", gap: "25px", paddingHorizontal: "10px" }}>
+                    <View style={{ flex: 1, gap: "6px", fontSize: "9px" }}>
+                        <Text style={{ fontWeight: "semibold" }}>Notas</Text>
+                        <Text
+                            style={{
+                                color: "#6B7280",
+                                textAlign: "justify",
+                                letterSpacing: "-0.15px",
+                                maxWidth: "200px",
+                            }}
+                        >
+                            Este orçamento é válido por 30 dias a partir da data de emissão e deve
+                            ser aceito formalmente para que os serviços possam ser realizados.
+                            Quaisquer alterações solicitadas podem impactar os valores apresentados.
+                        </Text>
+                    </View>
+
+                    <View style={{ fontSize: "10px", flex: 1, gap: "8px" }}>
+                        <View style={{ flexDirection: "row", fontWeight: "semibold", gap: "15px" }}>
+                            <Text style={{ flex: 1 }}>Subtotal</Text>
+                            <Text style={{ textAlign: "right" }}>{formatBRL(estimateTotal)}</Text>
+                        </View>
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                gap: "15px",
+                                borderBottom: "1px solid #e0e0e0",
+                                paddingBottom: "8px",
+                            }}
+                        >
+                            <Text style={{ flex: 1 }}>
+                                Desconto ({estimateProps.discountPercentage ?? 0}%)
+                            </Text>
+                            <Text style={{ textAlign: "right" }}>{formatBRL(discount)}</Text>
+                        </View>
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                fontWeight: "semibold",
+                                fontSize: "14px",
+                                gap: "15px",
+                            }}
+                        >
+                            <Text style={{ flex: 1 }}>Valor à pagar</Text>
+                            <Text style={{ textAlign: "right" }}>{formatBRL(finalValue)}</Text>
+                        </View>
+                    </View>
+                </View>
+
+                <View
+                    style={{
+                        flexDirection: "row",
+                        position: "absolute",
+                        width: "170mm",
+                        bottom: 20,
+                        alignItems: "center",
+                    }}
+                    fixed
+                >
+                    <View style={{ flex: 1 }}>
+                        <Text style={{ fontSize: "8.5px", color: "#a8a8a8" }}>
+                            {estimateProps.company.businessName} - CNPJ:{" "}
+                            {estimateProps.company.cnpj}
+                        </Text>
+                    </View>
+                    <FixrLogo style={{ width: "48px" }} />
+                </View>
+            </Page>
+        </Document>
     );
 };
