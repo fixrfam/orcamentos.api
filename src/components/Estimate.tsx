@@ -52,7 +52,7 @@ Font.register({
     ],
 });
 
-export const EstimatePdf = ({ estimateProps }: { estimateProps: EstimateProps }) => {
+export const EstimatePdf = ({ estimateProps }: Readonly<{ estimateProps: EstimateProps }>) => {
     return (
         <Document>
             <Page

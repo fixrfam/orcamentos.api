@@ -8,10 +8,10 @@ type estimateProps = z.infer<typeof estimatePropsSchema>;
 export function Entities({
     company,
     client,
-}: {
+}: Readonly<{
     company: estimateProps["company"];
     client: estimateProps["client"];
-}) {
+}>) {
     return (
         <View style={{ flexDirection: "row", marginTop: "20px", paddingHorizontal: "10px" }}>
             <View style={{ flex: 1, gap: "6px" }}>

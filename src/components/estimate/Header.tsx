@@ -6,11 +6,11 @@ export function Header({
     estNumber,
     estDate,
     companyImg,
-}: {
+}: Readonly<{
     estNumber: number;
     estDate: string;
     companyImg: string | undefined;
-}) {
+}>) {
     return (
         <View style={{ flexDirection: "row", paddingHorizontal: "10px" }} fixed>
             <View style={{ flex: 1 }}>

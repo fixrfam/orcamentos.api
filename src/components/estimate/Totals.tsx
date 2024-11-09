@@ -7,10 +7,10 @@ import { z } from "zod";
 export function Totals({
     items,
     discountPercentage,
-}: {
+}: Readonly<{
     items: z.infer<typeof estimatePropsSchema>["items"];
     discountPercentage?: number;
-}) {
+}>) {
     const estimateTotal = items.reduce((acc, item) => {
         return acc + item.value * item.quantity;
     }, 0);

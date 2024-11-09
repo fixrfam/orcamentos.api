@@ -4,7 +4,11 @@ import { View, Text } from "@react-pdf/renderer";
 import React from "react";
 import { z } from "zod";
 
-export function ItemsTable({ items }: { items: z.infer<typeof estimatePropsSchema>["items"] }) {
+export function ItemsTable({
+    items,
+}: Readonly<{
+    items: Readonly<z.infer<typeof estimatePropsSchema>["items"]>;
+}>) {
     return (
         <View style={{ marginVertical: "20px" }}>
             <View
@@ -72,6 +76,7 @@ export function ItemsTable({ items }: { items: z.infer<typeof estimatePropsSchem
             </View>
             {items.map((item, index) => (
                 <View
+                    key={index}
                     style={{
                         flexDirection: "row",
                         backgroundColor: index % 2 === 0 ? "transparent" : "#f9fafb",

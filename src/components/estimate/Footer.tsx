@@ -4,7 +4,11 @@ import FixrLogo from "../FixrLogo";
 import { z } from "zod";
 import { estimatePropsSchema } from "@/src/interfaces/pdf";
 
-export function Footer({ company }: { company: z.infer<typeof estimatePropsSchema>["company"] }) {
+export function Footer({
+    company,
+}: Readonly<{
+    company: z.infer<typeof estimatePropsSchema>["company"];
+}>) {
     return (
         <View
             style={{
